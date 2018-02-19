@@ -11,6 +11,21 @@ class ApplicationController < ActionController::Base
   end
   helper_method :cart
 
+  def current_user
+    if session[:user_id]
+      @current_user = User.find(session[:user_id])
+    else
+      redirect_to '/login'
+    end
+  end
+  helper_method :current_user
+
+  def authorize
+    if session[:user_id] == nil
+      redirect_to '/login'
+    end
+  end
+
   def update_cart(new_cart)
     cookies[:cart] = {
       value: JSON.generate(new_cart),
